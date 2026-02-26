@@ -8,16 +8,21 @@ This is the main application that ties together all components:
 - Static file serving
 """
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-import os
 
 from config import get_settings
 from api import auth, products, recommendations, hubs
 from services.db import create_tables
+
+# Resolve frontend directory relative to this file's location
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+TEMPLATES_DIR = str(FRONTEND_DIR / "templates")
+STATIC_DIR = str(FRONTEND_DIR / "static")
 
 
 @asynccontextmanager
@@ -49,11 +54,10 @@ app.add_middleware(
 )
 
 # Templates directory
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 # Static files (CSS, JS, images)
-os.makedirs("static", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Include API routers
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])

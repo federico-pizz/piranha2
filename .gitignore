@@ -38,6 +38,10 @@ venv/
 .venv/
 env/
 ENV/
+venv-piranha/
+
+# Local testing files
+requirements.txt
 
 # Python tools
 .mypy_cache/

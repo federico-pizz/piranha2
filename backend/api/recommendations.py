@@ -11,6 +11,7 @@ from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from pathlib import Path
 import redis
 import json
 
@@ -20,7 +21,8 @@ from services.db import User as DBUser
 from api.auth import get_current_user, require_auth
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+TEMPLATES_DIR = str(Path(__file__).resolve().parent.parent.parent / "frontend" / "templates")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 settings = get_settings()
 
 

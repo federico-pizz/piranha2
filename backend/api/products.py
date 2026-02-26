@@ -12,13 +12,15 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+from pathlib import Path
 
 from services.db import get_session, Product as DBProduct
 from api.auth import get_current_user
 from services.db import User as DBUser
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+TEMPLATES_DIR = str(Path(__file__).resolve().parent.parent.parent / "frontend" / "templates")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 
 def get_db():

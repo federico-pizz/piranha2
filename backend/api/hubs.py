@@ -8,11 +8,13 @@ from typing import Optional
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pathlib import Path
 from services.db import get_session
 from api.auth import get_current_user
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+TEMPLATES_DIR = str(Path(__file__).resolve().parent.parent.parent / "frontend" / "templates")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 HUB_CONFIG = {
     "tcg": {

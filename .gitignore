@@ -1,0 +1,114 @@
+# ============================================
+# SECURITY - Secrets & credentials
+# ============================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# ============================================
+# PROPRIETARY - Scrapers & sensitive scripts
+# ============================================
+scrapers/
+init.sql
+backend/verify_hubs.py
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python tools
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+.tox/
+.nox/
+
+# ============================================
+# ML / Data Science
+# ============================================
+ml/model/
+ml/train.py
+*.pt
+*.pth
+*.onnx
+*.bin
+*.h5
+*.pkl
+*.joblib
+*.safetensors
+wandb/
+mlruns/
+*.ckpt
+
+# ============================================
+# Scraped data & databases
+# ============================================
+scraper_data/
+*.db
+*.sqlite
+*.sqlite3
+*.sql.dump
+*.csv
+*.jsonl
+
+# ============================================
+# Docker (persistent volumes & overrides)
+# ============================================
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+pgdata/
+redis-data/
+
+# ============================================
+# IDE & OS
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================
+# Logs & temp files
+# ============================================
+*.log
+logs/
+tmp/
+temp/
+
+# ============================================
+# Documentation
+# ============================================
+docs/

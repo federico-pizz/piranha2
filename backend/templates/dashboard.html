@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Piranha ITA{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="dashboard-header">
+        <h1>Ciao, {{ user.email.split('@')[0] }}! 👋</h1>
+        <p>Gestisci le tue preferenze e scopri le raccomandazioni personalizzate.</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-main">
+            <!-- Recommendations -->
+            <div class="dashboard-section">
+                <h2>🎯 Raccomandazioni per te</h2>
+
+                {% if recommendations %}
+                <div class="recommendations-grid">
+                    {% for product in recommendations %}
+                    <a href="/products/{{ product.id }}" class="recommendation-card">
+                        <div class="rec-image">📦</div>
+                        <div class="rec-content">
+                            <h4>{{ product.title[:50] }}{% if product.title|length > 50 %}...{% endif %}</h4>
+                            <span class="rec-price">€{{ "%.2f"|format(product.price_eur) }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <a href="/recommendations" class="btn btn-secondary">Vedi tutte →</a>
+                {% else %}
+                <p class="empty-state">
+                    Non abbiamo ancora abbastanza dati per le raccomandazioni.
+                    <br>Inizia a esplorare i prodotti!
+                </p>
+                <a href="/products" class="btn btn-primary">Esplora Prodotti</a>
+                {% endif %}
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-section">
+                <h2>📊 Attività Recente</h2>
+                <p class="empty-state">Qui vedrai i prodotti che hai visualizzato di recente.</p>
+            </div>
+        </div>
+
+        <div class="dashboard-sidebar">
+            <!-- Preferences -->
+            <div class="dashboard-section">
+                <h2>⚙️ Preferenze</h2>
+
+                <form hx-post="/auth/preferences" hx-target="this" hx-swap="outerHTML" class="preferences-form">
+
+                    <div class="form-group">
+                        <label>Regioni preferite</label>
+                        <select name="regions" multiple>
+                            <option value="Lombardia" {% if 'Lombardia' in (preferences.get('regions', [])) %}selected{%
+                                endif %}>Lombardia</option>
+                            <option value="Lazio" {% if 'Lazio' in (preferences.get('regions', [])) %}selected{% endif
+                                %}>Lazio</option>
+                            <option value="Piemonte" {% if 'Piemonte' in (preferences.get('regions', [])) %}selected{%
+                                endif %}>Piemonte</option>
+                            <option value="Emilia-Romagna" {% if 'Emilia-Romagna' in (preferences.get('regions', []))
+                                %}selected{% endif %}>Emilia-Romagna</option>
+                            <option value="Veneto" {% if 'Veneto' in (preferences.get('regions', [])) %}selected{% endif
+                                %}>Veneto</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Budget massimo (€)</label>
+                        <input type="number" name="max_price" value="{{ preferences.get('max_price', '') }}"
+                            placeholder="10000" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Condizioni accettate</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="conditions" value="nuovo" {% if 'nuovo' in
+                                    (preferences.get('preferred_conditions', [])) %}checked{% endif %}>
+                                Nuovo
+                            </label>
+                            <label>
+                                <input type="checkbox" name="conditions" value="buono" {% if 'buono' in
+                                    (preferences.get('preferred_conditions', [])) %}checked{% endif %}>
+                                Buono
+                            </label>
+                            <label>
+                                <input type="checkbox" name="conditions" value="discreto" {% if 'discreto' in
+                                    (preferences.get('preferred_conditions', [])) %}checked{% endif %}>
+                                Discreto
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Salva Preferenze
+                    </button>
+                </form>
+            </div>
+
+            <!-- Account -->
+            <div class="dashboard-section">
+                <h2>👤 Account</h2>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Membro dal:</strong> {{ user.created_at.strftime('%d/%m/%Y') }}</p>
+                <form action="/auth/logout" method="POST">
+                    <button type="submit" class="btn btn-secondary btn-full">Esci</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .recommendations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--space-md);
+        margin-bottom: var(--space-lg);
+    }
+
+    .recommendation-card {
+        background: var(--color-bg-tertiary);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: transform var(--transition-fast);
+    }
+
+    .recommendation-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .rec-image {
+        aspect-ratio: 1;
+        background: var(--color-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+    }
+
+    .rec-content {
+        padding: var(--space-sm);
+    }
+
+    .rec-content h4 {
+        font-size: 0.875rem;
+        margin-bottom: var(--space-xs);
+    }
+
+    .rec-price {
+        color: var(--color-secondary);
+        font-weight: 600;
+    }
+
+    .empty-state {
+        color: var(--color-text-muted);
+        padding: var(--space-xl);
+        text-align: center;
+    }
+
+    .preferences-form .form-group {
+        margin-bottom: var(--space-md);
+    }
+
+    .preferences-form select[multiple] {
+        height: auto;
+        min-height: 100px;
+    }
+
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        font-weight: normal;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Confronta Prodotti{% endblock %}
+
+{% block content %}
+<section class="compare-page">
+    <div class="container">
+        <header class="page-header">
+            <h1>Confronta Prodotti</h1>
+            <p>{{ products|length }} prodotti in confronto</p>
+        </header>
+
+        <div class="compare-table-wrapper">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Caratteristica</th>
+                        {% for product in products %}
+                        <th>
+                            <a href="/products/{{ product.id }}">{{ product.title[:30] }}...</a>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature-name">Prezzo</td>
+                        {% for product in products %}
+                        <td class="price">€{{ "%.2f"|format(product.price_eur) }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Condizione</td>
+                        {% for product in products %}
+                        <td><span class="condition-badge condition-{{ product.condition }}">{{ product.condition
+                                }}</span></td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Regione</td>
+                        {% for product in products %}
+                        <td>{{ product.region or '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Città</td>
+                        {% for product in products %}
+                        <td>{{ product.city or '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Marca</td>
+                        {% for product in products %}
+                        <td>{{ product.brand or '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Anno</td>
+                        {% for product in products %}
+                        <td>{{ product.year or '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Fonte</td>
+                        {% for product in products %}
+                        <td>
+                            <a href="{{ product.source_url }}" target="_blank" rel="noopener">
+                                {{ product.source_name }}
+                            </a>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="compare-actions">
+            <a href="/products" class="btn btn-outline">← Torna ai Prodotti</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .compare-page {
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .compare-table-wrapper {
+        overflow-x: auto;
+        margin-bottom: 2rem;
+    }
+
+    .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .compare-table th,
+    .compare-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .compare-table th {
+        background: var(--color-primary);
+        color: white;
+        font-weight: 600;
+    }
+
+    .compare-table th:first-child {
+        min-width: 150px;
+    }
+
+    .compare-table th a {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .feature-name {
+        font-weight: 600;
+        color: var(--color-text-muted);
+    }
+
+    .compare-table .price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .compare-actions {
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+
+        .compare-table th,
+        .compare-table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+        }
+    }
+</style>
+{% endblock %}

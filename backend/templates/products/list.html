@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Prodotti - Piranha ITA{% endblock %}
+
+{% block content %}
+<section class="products-page">
+    <div class="products-header">
+        <h1>Prodotti</h1>
+        <span>{{ total }} risultati</span>
+    </div>
+
+    <!-- Filters -->
+    <form class="filters" hx-get="/products" hx-target="#products-grid" hx-trigger="change" hx-push-url="true">
+
+        <div class="filter-group">
+            <label for="search">Cerca</label>
+            <input type="text" id="search" name="search" value="{{ filters.search or '' }}"
+                placeholder="Parola chiave...">
+        </div>
+
+        <div class="filter-group">
+            <label for="category">Categoria</label>
+            <select id="category" name="category">
+                <option value="">Tutte</option>
+                <option value="auto" {% if filters.category=='auto' %}selected{% endif %}>Auto</option>
+                <option value="moto" {% if filters.category=='moto' %}selected{% endif %}>Moto</option>
+                <option value="elettronica" {% if filters.category=='elettronica' %}selected{% endif %}>Elettronica
+                </option>
+                <option value="casa" {% if filters.category=='casa' %}selected{% endif %}>Casa</option>
+                <option value="carte" {% if filters.category=='carte' %}selected{% endif %}>Carte TCG</option>
+                <option value="abiti" {% if filters.category=='abiti' %}selected{% endif %}>Abbigliamento</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="condition">Condizione</label>
+            <select id="condition" name="condition">
+                <option value="">Tutte</option>
+                <option value="nuovo" {% if filters.condition=='nuovo' %}selected{% endif %}>Nuovo</option>
+                <option value="buono" {% if filters.condition=='buono' %}selected{% endif %}>Buono</option>
+                <option value="discreto" {% if filters.condition=='discreto' %}selected{% endif %}>Discreto</option>
+                <option value="usato" {% if filters.condition=='usato' %}selected{% endif %}>Usato</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="min_price">Prezzo Min</label>
+            <input type="number" id="min_price" name="min_price" value="{{ filters.min_price or '' }}" placeholder="0 €"
+                min="0">
+        </div>
+
+        <div class="filter-group">
+            <label for="max_price">Prezzo Max</label>
+            <input type="number" id="max_price" name="max_price" value="{{ filters.max_price or '' }}"
+                placeholder="10000 €" min="0">
+        </div>
+
+        <div class="filter-group">
+            <label for="region">Regione</label>
+            <select id="region" name="region">
+                <option value="">Tutte</option>
+                <option value="Lombardia" {% if filters.region=='Lombardia' %}selected{% endif %}>Lombardia</option>
+                <option value="Lazio" {% if filters.region=='Lazio' %}selected{% endif %}>Lazio</option>
+                <option value="Piemonte" {% if filters.region=='Piemonte' %}selected{% endif %}>Piemonte</option>
+                <option value="Emilia-Romagna" {% if filters.region=='Emilia-Romagna' %}selected{% endif %}>
+                    Emilia-Romagna</option>
+                <option value="Veneto" {% if filters.region=='Veneto' %}selected{% endif %}>Veneto</option>
+                <option value="Toscana" {% if filters.region=='Toscana' %}selected{% endif %}>Toscana</option>
+                <option value="Campania" {% if filters.region=='Campania' %}selected{% endif %}>Campania</option>
+                <option value="Sicilia" {% if filters.region=='Sicilia' %}selected{% endif %}>Sicilia</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Products Grid -->
+    <div id="products-grid" class="products-grid">
+        {% include "products/_list_items.html" %}
+    </div>
+
+    <!-- Load More (infinite scroll trigger) -->
+    {% if has_more %}
+    <div hx-get="/products?page={{ page + 1 }}" hx-trigger="revealed" hx-target="#products-grid" hx-swap="beforeend"
+        class="loading-trigger">
+        <span class="htmx-indicator loading-spinner"></span>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

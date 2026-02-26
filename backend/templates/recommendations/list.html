@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}I Tuoi Consigli{% endblock %}
+
+{% block content %}
+<section class="recommendations-page">
+    <div class="container">
+        <header class="page-header">
+            <h1>I Tuoi Consigli</h1>
+            <p>Prodotti selezionati in base alle tue preferenze</p>
+        </header>
+
+        {% if products %}
+        <div class="products-grid" id="recommendations-grid">
+            {% for product in products %}
+            <article class="product-card">
+                <div class="product-image">
+                    <span class="condition-badge condition-{{ product.condition }}">{{ product.condition }}</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">
+                        <a href="/products/{{ product.id }}">{{ product.title[:50] }}{% if product.title|length > 50
+                            %}...{% endif %}</a>
+                    </h3>
+                    <div class="product-meta">
+                        <span class="product-location">📍 {{ product.region or 'Italia' }}</span>
+                        {% if product.brand %}
+                        <span class="product-brand">{{ product.brand }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">€{{ "%.2f"|format(product.price_eur) }}</span>
+                        <div class="feedback-buttons">
+                            <button hx-post="/recommendations/feedback"
+                                hx-vals='{"product_id": "{{ product.id }}", "type": "like"}' hx-swap="outerHTML"
+                                class="btn-icon" title="Mi piace">
+                                👍
+                            </button>
+                            <button hx-post="/recommendations/feedback"
+                                hx-vals='{"product_id": "{{ product.id }}", "type": "dislike"}' hx-swap="outerHTML"
+                                class="btn-icon" title="Non mi interessa">
+                                👎
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <h3>Nessun consiglio disponibile</h3>
+            <p>Inizia a sfogliare i prodotti per ricevere consigli personalizzati!</p>
+            <a href="/products" class="btn btn-primary">Sfoglia Prodotti</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    .recommendations-page {
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        color: var(--color-text-muted);
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        color: var(--color-text-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .feedback-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-icon {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+        background: var(--color-primary-light);
+    }
+</style>
+{% endblock %}

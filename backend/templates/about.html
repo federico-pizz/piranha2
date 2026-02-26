@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Chi Siamo - Piranha ITA{% endblock %}
+
+{% block content %}
+<section class="about-page">
+    <div class="container">
+        <div class="about-header">
+            <h1>🐟 Chi Siamo</h1>
+            <p>La missione di Piranha ITA è democratizzare il mercato dell'usato.</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-section">
+                <h2>La Nostra Storia</h2>
+                <p>
+                    Nati dalla passione per il collezionismo, abbiamo creato Piranha ITA per risolvere un problema
+                    semplice:
+                    trovare il prezzo giusto per carte, videogiochi e fumetti è difficile.
+                    Le piattaforme sono frammentate, i prezzi variano enormemente e le truffe sono dietro l'angolo.
+                </p>
+                <p>
+                    Volevamo uno strumento che aggregasse tutto in un unico posto, in modo trasparente e veloce.
+                </p>
+            </div>
+
+            <div class="about-section">
+                <h2>Come Funziona</h2>
+                <ul class="feature-list">
+                    <li>
+                        <strong>Aggregazione:</strong> Scansioniamo decine di siti affidabili (eBay, Cardmarket, negozi
+                        locali).
+                    </li>
+                    <li>
+                        <strong>Analisi:</strong> Normalizziamo le condizioni (es. "Near Mint" = "Come Nuovo").
+                    </li>
+                    <li>
+                        <strong>Privacy:</strong> Non tracciamo i tuoi dati per venderli a terzi. Le tue preferenze
+                        restano tue.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h2>Contattaci</h2>
+                <p>Hai suggerimenti o vuoi segnalare un negozio?</p>
+                <a href="mailto:info@piranha-ita.com" class="btn btn-primary">Scrivici una Email</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .about-page {
+        padding: 4rem 0;
+        background: var(--color-surface);
+    }
+
+    .about-header {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 4rem;
+    }
+
+    .about-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--color-primary);
+    }
+
+    .about-header p {
+        font-size: 1.25rem;
+        color: var(--color-text-muted);
+    }
+
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .about-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--color-primary);
+        padding-left: 1rem;
+    }
+
+    .about-section p {
+        line-height: 1.8;
+        color: var(--color-text);
+        margin-bottom: 1rem;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .feature-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .feature-list li::before {
+        content: "👉";
+        position: absolute;
+        left: 0;
+    }
+</style>
+{% endblock %}

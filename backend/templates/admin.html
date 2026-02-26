@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Piranha ITA{% endblock %}
+
+{% block content %}
+<section class="admin-panel">
+    <div class="container">
+        <div class="admin-header">
+            <h1>🛠️ Admin Panel</h1>
+            <p>Monitor system status and managing scrapers.</p>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Scraper Status -->
+            <div class="admin-card">
+                <h3>🤖 Scraper Status</h3>
+                <div class="status-list">
+                    <div class="status-item">
+                        <span class="status-name">eBay Scraper</span>
+                        <span class="status-badge status-active">Active</span>
+                        <span class="status-time">Last run: 10m ago</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-name">TCGdex</span>
+                        <span class="status-badge status-active">Active</span>
+                        <span class="status-time">Last run: 15m ago</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-name">Mock Scraper</span>
+                        <span class="status-badge status-idle">Idle</span>
+                        <span class="status-time">Last run: 1h ago</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-outline">View Logs</button>
+                    <button class="btn btn-sm btn-primary">Trigger All</button>
+                </div>
+            </div>
+
+            <!-- System Stats -->
+            <div class="admin-card">
+                <h3>📊 System Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">1,240</span>
+                        <span class="stat-label">Total Products</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">145</span>
+                        <span class="stat-label">New Today</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">5</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">12ms</span>
+                        <span class="stat-label">Avg Latency</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database -->
+            <div class="admin-card">
+                <h3>💾 Database</h3>
+                <div class="db-info">
+                    <p><strong>Size:</strong> 45 MB</p>
+                    <p><strong>Connections:</strong> 3/100</p>
+                    <p><strong>Cache Hit Rate:</strong> 94%</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-danger">Flush Cache</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .admin-panel {
+        padding: 4rem 0;
+        background: var(--color-background);
+    }
+
+    .admin-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .admin-card {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-card h3 {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 1rem;
+    }
+
+    .status-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.875rem;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+    }
+
+    .status-idle {
+        background: rgba(107, 114, 128, 0.1);
+        color: #6b7280;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+    }
+
+    .card-actions {
+        margin-top: auto;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

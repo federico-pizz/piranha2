@@ -1,0 +1,39 @@
+{# Product list items partial - used by HTMX for infinite scroll #}
+{% for product in products %}
+<article class="product-card {% if product.source_name == 'ebay' %}source-ebay{% endif %}">
+    <a href="/products/{{ product.id }}" class="product-link">
+        <div class="product-image">
+            <span class="placeholder-icon">📦</span>
+            <span class="condition-badge condition-{{ product.condition }}">{{ product.condition }}</span>
+            {% if product.source_name == 'ebay' %}
+            <span class="source-badge source-ebay-badge">
+                <img src="https://ir.ebaystatic.com/cr/v/c01/logo-ebay.svg" alt="eBay" class="ebay-logo">
+            </span>
+            {% endif %}
+        </div>
+        <div class="product-info">
+            <h3 class="product-title">{{ product.title[:50] }}{% if product.title|length > 50 %}...{% endif %}</h3>
+            <div class="product-meta">
+                <span class="product-location">📍 {{ product.city or product.region or 'Italia' }}</span>
+                {% if product.brand %}
+                <span class="product-brand">{{ product.brand }}</span>
+                {% endif %}
+            </div>
+            <div class="product-footer">
+                <span class="product-price">€{{ "%.2f"|format(product.price_eur) }}</span>
+                <span class="product-source {% if product.source_name == 'ebay' %}ebay-source{% endif %}">
+                    {% if product.source_name == 'ebay' %}
+                    <img src="https://ir.ebaystatic.com/cr/v/c01/logo-ebay.svg" alt="eBay" class="ebay-inline-logo">
+                    {% else %}
+                    {{ product.source_name }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </a>
+</article>
+{% else %}
+<div class="empty-state">
+    <p>Nessun prodotto trovato. Prova a modificare i filtri.</p>
+</div>
+{% endfor %}

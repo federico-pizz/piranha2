@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<section class="hub-hero {{ config.hero_class }}">
+    <div class="container text-center">
+        <div class="hub-icon">{{ config.icon }}</div>
+        <h1>{{ config.title }}</h1>
+        <p class="hub-subtitle">{{ config.subtitle }}</p>
+    </div>
+</section>
+
+<section class="hub-controls">
+    <div class="container">
+        <!-- Interactive specialized filters for this hub -->
+        <div class="hub-filters-bar">
+            {% for filter in config.filters %}
+            <div class="filter-group">
+                <label>{{ filter|title }}</label>
+                <select class="form-select" name="{{ filter }}" hx-get="/products" hx-target="#search-results"
+                    hx-include="[name='category']">
+                    <option value="">All</option>
+                    <!-- Dynamically populated via HTMX in future steps -->
+                    <option disabled>Loading...</option>
+                </select>
+            </div>
+            {% endfor %}
+            <input type="hidden" name="category" value="{{ category }}">
+        </div>
+    </div>
+</section>
+
+<section class="hub-content container mt-4">
+    <!-- Quick Search for this hub -->
+    <div class="mb-4">
+        <input type="search" class="form-control form-control-lg" name="search"
+            placeholder="Search inside {{ config.title }}..." hx-get="/products"
+            hx-trigger="keyup changed delay:500ms, search" hx-target="#search-results" hx-include="[name='category']">
+    </div>
+
+    <!-- Results Area (reusing product list component) -->
+    <div id="search-results">
+        <div class="text-center p-5 text-muted">
+            <div class="spinner-border mb-3" role="status"></div>
+            <p>Loading curated items...</p>
+        </div>
+    </div>
+</section>
+
+<!-- Auto-load initial results -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        htmx.ajax('GET', '/products?category={{ category }}', '#search-results');
+    });
+</script>
+
+<style>
+    .hub-hero {
+        padding: 4rem 0;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        margin-bottom: 2rem;
+        border-radius: 0 0 1rem 1rem;
+    }
+
+    .hero-tcg {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    }
+
+    /* Blue to Purple */
+    .hero-retro {
+        background: linear-gradient(135deg, #0ea5e9, #10b981);
+    }
+
+    /* Cyan to Emerald */
+    .hero-comics {
+        background: linear-gradient(135deg, #6366f1, #ec4899);
+    }
+
+    /* Indigo to Pink */
+
+    .hub-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .hub-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
+
+    .hub-filters-bar {
+        display: flex;
+        gap: 1rem;
+        background: var(--color-surface);
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .filter-group label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: var(--color-text-muted);
+    }
+</style>
+{% endblock %}

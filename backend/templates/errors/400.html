@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}400 - Bad Request{% endblock %}
+
+{% block content %}
+<section class="error-page">
+    <div class="container">
+        <div class="error-content">
+            <h1 class="error-code">400</h1>
+            <h2>Richiesta non valida</h2>
+            <p>{{ message or "La tua richiesta non può essere elaborata." }}</p>
+            <div class="error-actions">
+                <a href="javascript:history.back()" class="btn btn-primary">Torna Indietro</a>
+                <a href="/" class="btn btn-outline">Vai alla Home</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .error-page {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .error-content {
+        max-width: 500px;
+    }
+
+    .error-code {
+        font-size: 6rem;
+        font-weight: 800;
+        color: var(--color-warning);
+        margin: 0;
+        line-height: 1;
+    }
+
+    .error-content h2 {
+        margin-top: 1rem;
+    }
+
+    .error-content p {
+        color: var(--color-text-muted);
+        margin: 1rem 0 2rem;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,27 @@
+{# Partial template for HTMX updates #}
+{% for product in products %}
+<article class="product-card">
+    <div class="product-image">
+        <span class="condition-badge condition-{{ product.condition }}">{{ product.condition }}</span>
+    </div>
+    <div class="product-info">
+        <h3 class="product-title">
+            <a href="/products/{{ product.id }}">{{ product.title[:50] }}{% if product.title|length > 50 %}...{% endif
+                %}</a>
+        </h3>
+        <div class="product-meta">
+            <span class="product-location">📍 {{ product.region or 'Italia' }}</span>
+        </div>
+        <div class="product-footer">
+            <span class="product-price">€{{ "%.2f"|format(product.price_eur) }}</span>
+            <div class="feedback-buttons">
+                <button hx-post="/recommendations/feedback" hx-vals='{"product_id": "{{ product.id }}", "type": "like"}'
+                    hx-swap="outerHTML" class="btn-icon">👍</button>
+                <button hx-post="/recommendations/feedback"
+                    hx-vals='{"product_id": "{{ product.id }}", "type": "dislike"}' hx-swap="outerHTML"
+                    class="btn-icon">👎</button>
+            </div>
+        </div>
+    </div>
+</article>
+{% endfor %}

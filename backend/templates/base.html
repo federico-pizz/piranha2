@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Piranha ITA{% endblock %}</title>
+
+    <!-- SEO Meta -->
+    <meta name="description"
+        content="{% block description %}Confronta e scopri le migliori offerte di usato in Italia{% endblock %}">
+
+    <!-- HTMX - Server-driven interactivity -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <!-- Alpine.js - Lightweight reactivity -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}"
+    x-data="{ menuOpen: false, darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark': darkMode }">
+
+    <!-- Navigation -->
+    <nav class="navbar" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 20">
+        <div class="nav-container" :class="{ 'nav-scrolled': scrolled }">
+            <a href="/" class="nav-logo">
+                🐟 Piranha ITA
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="nav-links">
+                <div class="nav-dropdown" x-data="{ open: false }">
+                    <button @click="open = !open" @click.outside="open = false" class="nav-link dropdown-toggle">
+                        Hubs ▾
+                    </button>
+                    <div class="dropdown-menu" x-show="open" x-transition>
+                        <a href="/hubs/tcg" class="dropdown-item">🃏 TCG Vault</a>
+                        <a href="/hubs/retro" class="dropdown-item">🕹️ Retro Cave</a>
+                        <a href="/hubs/comics" class="dropdown-item">📚 Comics Corner</a>
+                    </div>
+                </div>
+                <a href="/products" class="nav-link">Tutto</a>
+                {% if user %}
+                <a href="/recommendations/dashboard" class="nav-link">Dashboard</a>
+                <form action="/auth/logout" method="POST" class="nav-logout">
+                    <button type="submit" class="nav-link btn-logout">Esci</button>
+                </form>
+                {% else %}
+                <a href="/auth/login" class="nav-link">Accedi</a>
+                <a href="/auth/register" class="btn btn-primary">Registrati</a>
+                {% endif %}
+
+                <!-- Dark Mode Toggle -->
+                <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" class="btn-icon"
+                    aria-label="Toggle dark mode">
+                    <span x-show="!darkMode">🌙</span>
+                    <span x-show="darkMode">☀️</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="nav-mobile-btn" @click="menuOpen = !menuOpen" aria-label="Menu">
+                <span x-show="!menuOpen">☰</span>
+                <span x-show="menuOpen">✕</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="nav-mobile" x-show="menuOpen" x-transition>
+            <div class="nav-mobile-section">
+                <span class="nav-mobile-label">Hubs</span>
+                <a href="/hubs/tcg" class="nav-mobile-link">🃏 TCG Vault</a>
+                <a href="/hubs/retro" class="nav-mobile-link">🕹️ Retro Cave</a>
+                <a href="/hubs/comics" class="nav-mobile-link">📚 Comics Corner</a>
+            </div>
+            <a href="/products" class="nav-mobile-link">Tutti i Prodotti</a>
+            {% if user %}
+            <a href="/recommendations/dashboard" class="nav-mobile-link">Dashboard</a>
+            <a href="/auth/logout" class="nav-mobile-link">Esci</a>
+            {% else %}
+            <a href="/auth/login" class="nav-mobile-link">Accedi</a>
+            <a href="/auth/register" class="nav-mobile-link">Registrati</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div id="flash-messages" class="flash-container" hx-swap-oob="true">
+        {% block flash %}{% endblock %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Piranha ITA</h4>
+                <p>Il tuo comparatore di usato italiano.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Link Utili</h4>
+                <a href="/products">Prodotti</a>
+                <a href="/about">Chi Siamo</a>
+            </div>
+            <div class="footer-section">
+                <h4>Privacy</h4>
+                <p>I tuoi dati restano con noi. Nessun tracking esterno.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Piranha ITA. Privacy-first.</p>
+        </div>
+    </footer>
+
+    <!-- HTMX Config -->
+    <script>
+        document.body.addEventListener('htmx:beforeSwap', function (event) {
+            // Handle 401 redirects
+            if (event.detail.xhr.status === 401) {
+                window.location.href = '/auth/login';
+            }
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
